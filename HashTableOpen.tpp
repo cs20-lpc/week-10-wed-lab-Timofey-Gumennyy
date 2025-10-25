@@ -1,6 +1,12 @@
 template <typename Key, typename Val>
 HashTableOpen<Key, Val>::HashTableOpen(int i) {
     // TODO
+    M = i;
+    ht = new LinkedList<Record>*[i];
+    for (int j = 0; j < i; j++) {
+        ht[j] = new LinkedList<Record>();
+    }
+
 }
 
 template <typename Key, typename Val>
@@ -22,6 +28,12 @@ HashTableOpen<Key, Val>& HashTableOpen<Key, Val>::operator=
 template <typename Key, typename Val>
 HashTableOpen<Key, Val>::~HashTableOpen() {
     // TODO
+    clear();
+    for (int i = 0; i < M; i++)
+    {
+        delete ht[i];
+    }
+    delete ht;
 }
 
 template <typename Key, typename Val>
@@ -100,6 +112,8 @@ void HashTableOpen<Key, Val>::copy(const HashTableOpen<Key, Val>& copyObj) {
 template <typename Key, typename Val>
 Val HashTableOpen<Key, Val>::find(const Key& k) const {
     // TODO
+    LinkedList<Record>* list = ht[hash(k)];
+    return list->getElement(FindIndexInList(k, list)).v;
 }
 
 template <typename Key, typename Val>
@@ -153,14 +167,35 @@ int HashTableOpen<Key, Val>::hash(const Key& k) const {
 template <typename Key, typename Val>
 void HashTableOpen<Key, Val>::insert(const Key& k, const Val& v) {
     // TODO
+    ht[hash(k)]->append(Record(k, v));
+}
+
+template <typename Key, typename Val>
+int HashTableOpen<Key, Val>::FindIndexInList(const Key& key, LinkedList<Record>* list) const
+{
+    for (int i = 0; i < list->getLength(); i++)
+    {
+        if (list->getElement(i).k == key)
+            return i;
+
+    }
+    throw string("Key not found");
 }
 
 template <typename Key, typename Val>
 void HashTableOpen<Key, Val>::remove(const Key& k) {
     // TODO
+    LinkedList<Record>* list = ht[hash(k)];
+    list->remove(FindIndexInList(k, list));
 }
 
 template <typename Key, typename Val>
 int HashTableOpen<Key, Val>::size() const {
     // TODO
+    int size = 0;
+    for (int i = 0; i < M; i++)
+    {
+        size += ht[i]->getLength();
+    }
+    return size;
 }

@@ -53,6 +53,7 @@ class HashTableOpen : public Dictionary<Key, Val> {
         // add the record as a key-value pair to the dictionary
         virtual void insert(const Key&, const Val&) override;
 
+        int FindIndexInList(const Key& key, LinkedList<Record>* list) const;
         // remove the record that matches the argument key from the dictionary
         // if multiple records match, remove an arbitrary one
         virtual void remove(const Key&) override;
